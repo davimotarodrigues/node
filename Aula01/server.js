@@ -3,7 +3,7 @@ const http = require('http');
 
 // Configurando as informações do servidor
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3001;
 
 // Criando o servidor usando uma função com nome diferente
 const meuServidor = http.createServer((req, res) => {
