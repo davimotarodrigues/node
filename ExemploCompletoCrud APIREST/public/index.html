@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<title>Sistema de Carros com Fetch API</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  input, textarea { width: 300px; margin-bottom: 10px; }
+  button { margin-top: 10px; }
+  li { margin-bottom: 15px; }
+</style>
+</head>
+<body>
+
+  <h1>Gerenciar Carros (API + Fetch)</h1>
+
+  <!-- Formulário para adicionar novo carro -->
+  <h2>Adicionar Carro</h2>
+  <form id="formAdicionar">
+    <input type="text" id="nome" placeholder="Nome" required /><br />
+    <textarea id="desc" placeholder="Descrição" required></textarea><br />
+    <input type="url" id="url_info" placeholder="URL Informações" required /><br />
+    <input type="url" id="url_foto" placeholder="URL Foto" required /><br />
+    <input type="url" id="url_video" placeholder="URL Vídeo" required /><br />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <!-- Lista dos carros cadastrados -->
+  <h2>Carros Cadastrados</h2>
+  <ul id="listaCarros"></ul>
+
+<script>
+  // URL base da API
+  const apiBase = '/api/carros';
+
+  // Função para carregar e mostrar os carros na tela
+  async function carregarCarros() {
+    const res = await fetch(apiBase);
+    const carros = await res.json();
+
+    const lista = document.getElementById('listaCarros');
+    lista.innerHTML = ''; // Limpa lista antes de preencher
+
+    carros.forEach(carro => {
+      const li = document.createElement('li');
+
+      // Conteúdo do item da lista com links e botões
+      li.innerHTML = `
+        <strong>${carro.nome}</strong>: ${carro.desc} <br/>
+        <a href="${carro.url_info}" target="_blank">Info</a> |
+        <a href="${carro.url_foto}" target="_blank">Foto</a> |
+        <a href="${carro.url_video}" target="_blank">Vídeo</a><br/>
+        <button onclick="excluirCarro('${carro.nome}')">Excluir</button>
+        <button onclick="editarCarro('${carro.nome}')">Editar</button>
+      `;
+      lista.appendChild(li);
+    });
+  }
+
+  // Função para excluir um carro via API
+  async function excluirCarro(nome) {
+    if (!confirm(`Confirma exclusão do carro ${nome}?`)) return;
+
+    const res = await fetch(`${apiBase}/${encodeURIComponent(nome)}`, {
+      method: 'DELETE'
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Carro excluído.');
+    carregarCarros(); // Atualiza lista após exclusão
+  }
+
+  // Função para editar um carro — usa prompt simples para edição rápida
+  function editarCarro(nome) {
+    fetch(apiBase)
+      .then(res => res.json())
+      .then(carros => {
+        const carro = carros.find(c => c.nome === nome);
+        if (!carro) return alert('Carro não encontrado');
+
+        // Pedir novos dados ao usuário via prompt()
+        const novaDesc = prompt('Nova descrição:', carro.desc);
+        if (novaDesc === null) return; // Cancelou
+
+        const novaUrlInfo = prompt('Nova URL de informações:', carro.url_info);
+        if (novaUrlInfo === null) return;
+
+        const novaUrlFoto = prompt('Nova URL da foto:', carro.url_foto);
+        if (novaUrlFoto === null) return;
+
+        const novaUrlVideo = prompt('Nova URL do vídeo:', carro.url_video);
+        if (novaUrlVideo === null) return;
+
+        // Enviar PUT para API com dados atualizados
+        fetch(`${apiBase}/${encodeURIComponent(nome)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            desc: novaDesc,
+            url_info: novaUrlInfo,
+            url_foto: novaUrlFoto,
+            url_video: novaUrlVideo
+          })
+        }).then(() => {
+          alert('Carro atualizado com sucesso!');
+          carregarCarros();
+        });
+      });
+  }
+
+  // Listener do formulário de adicionar carro
+  document.getElementById('formAdicionar').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const novoCarro = {
+      nome: document.getElementById('nome').value,
+      desc: document.getElementById('desc').value,
+      url_info: document.getElementById('url_info').value,
+      url_foto: document.getElementById('url_foto').value,
+      url_video: document.getElementById('url_video').value
+    };
+
+    const res = await fetch(apiBase, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(novoCarro)
+    });
+
+    if (res.ok) {
+      alert('Carro adicionado com sucesso!');
+      e.target.reset(); // Limpa formulário
+      carregarCarros(); // Atualiza lista
+    } else {
+      const error = await res.json();
+      alert(error.error || 'Erro ao adicionar carro');
+    }
+  });
+
+  // Carrega a lista ao abrir a página
+  carregarCarros();
+</script>
+
+</body>
+</html>
