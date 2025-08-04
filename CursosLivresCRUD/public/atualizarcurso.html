@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Atualizar Curso</title>
+</head>
+<body>
+  <h1>Atualizar Curso</h1>
+  <form action="/atualizar-curso" method="POST">
+    <label for="id">ID do Curso:</label><br />
+    <input type="number" id="id" name="id" required /><br />
+
+    <label for="nome">Novo Nome do Curso:</label><br />
+    <input type="text" id="nome" name="nome" required /><br />
+
+    <label for="periodo">Novo Período:</label><br />
+    <select id="periodo" name="periodo" required>
+      <option value="manhã">Manhã</option>
+      <option value="tarde">Tarde</option>
+      <option value="noite">Noite</option>
+    </select><br />
+
+    <label for="descricao">Nova Descrição:</label><br />
+    <textarea id="descricao" name="descricao" required></textarea><br /><br />
+
+    <button type="submit">Atualizar Curso</button>
+  </form>
+  <br />
+  <a href="/">Voltar</a>
+</body>
+</html>

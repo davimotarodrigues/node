@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buscar Cursos</title>
+</head>
+<body>
+  <h1>Buscar Cursos</h1>
+  <form action="/cursos/busca" method="GET">
+    <label for="nome">Buscar por nome:</label><br />
+    <input type="text" id="nome" name="nome" /><br /><br />
+
+    <label for="periodo">Buscar por período:</label><br />
+    <select id="periodo" name="periodo">
+      <option value="">-- Selecione --</option>
+      <option value="manhã">Manhã</option>
+      <option value="tarde">Tarde</option>
+      <option value="noite">Noite</option>
+    </select><br /><br />
+
+    <button type="submit">Buscar</button>
+  </form>
+  <br />
+  <a href="/">Voltar</a>
+</body>
+</html>
