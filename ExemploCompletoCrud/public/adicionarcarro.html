@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Adicionar Carro</title>
+</head>
+<body>
+  <h1>Adicionar Novo Carro</h1>
+  <form action="/adicionar-carro" method="POST">
+    <label for="nome">Nome do Carro:</label><br />
+    <input type="text" id="nome" name="nome" required /><br />
+
+    <label for="desc">Descrição:</label><br />
+    <textarea id="desc" name="desc" required></textarea><br />
+
+    <label for="url_info">URL de Informações:</label><br />
+    <input type="url" id="url_info" name="url_info" required /><br />
+
+    <label for="url_foto">URL da Foto:</label><br />
+    <input type="url" id="url_foto" name="url_foto" required /><br />
+
+    <label for="url_video">URL do Vídeo:</label><br />
+    <input type="url" id="url_video" name="url_video" required /><br /><br />
+
+    <button type="submit">Adicionar Carro</button>
+  </form>
+  <br />
+  <a href="/">Voltar</a>
+</body>
+</html>
